@@ -1,3 +1,5 @@
+from functools import lru_cache
+
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -11,12 +13,13 @@ settings_config_dict = SettingsConfigDict(
 )
 
 
-class Settings(BaseSettings):
+class SettingsModel(BaseSettings):
     model_config = settings_config_dict
 
 
 class FastAPISettings(BaseModel):
     debug: bool = True
+    api_prefix: str = "/api"
     docs_url: str = "/docs"
     openapi_prefix: str = ""
     openapi_url: str = "/openapi.json"
@@ -38,11 +41,7 @@ class CorsMiddlewareSettings(BaseModel):
     allow_headers: list[str] = ["*"]
 
 
-class PrefixSettings(BaseModel):
-    api_prefix: str = "/api"
-
-
-class Config(BaseModel):
+class Settings(BaseModel):
     # auth: AuthSettings = AuthSettings()
     # redis: RedisSettings = RedisSettings()
     # postgres: PostgresSettings = PostgresSettings()
@@ -50,7 +49,6 @@ class Config(BaseModel):
     fastapi: FastAPISettings = FastAPISettings()
     logging: LoggingSettings = LoggingSettings()
     cors_middleware: CorsMiddlewareSettings = CorsMiddlewareSettings()
-    prefixes: PrefixSettings = PrefixSettings()
 
     # @property
     # def postgres_dsn(self) -> PostgresDsn:
@@ -72,3 +70,8 @@ class Config(BaseModel):
     @property
     def cors_middleware_kwargs(self) -> dict[str, any]:
         return self.cors_middleware.model_dump()
+
+
+@lru_cache
+def get_app_settings() -> Settings:
+    return Settings()
