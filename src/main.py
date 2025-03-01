@@ -1,13 +1,16 @@
-import asyncio
 from contextlib import asynccontextmanager
 
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from starlette.middleware.cors import CORSMiddleware
+from starlette.staticfiles import StaticFiles
+from starlette.templating import Jinja2Templates
 
-from src.core.config import Config
+from src.core.paths import TEMPLATES_PATH, STATIC_PATH
+from src.core.settings import get_app_settings
 from src.core.toolkit import add_middleware
-from src.routers import root
+
+settings = get_app_settings()
 
 
 @asynccontextmanager
@@ -17,28 +20,19 @@ async def lifespan(_: FastAPI):
     ...
 
 
-def get_application() -> FastAPI:
-    config = Config()
+app = FastAPI(**settings.fastapi_kwargs, lifespan=lifespan)
+add_middleware(app, CORSMiddleware, **settings.cors_middleware_kwargs)
 
-    application = FastAPI(**config.fastapi_kwargs, lifespan=lifespan)
-
-    application.include_router(root.router)
-
-    add_middleware(application, CORSMiddleware, **config.cors_middleware_kwargs)
-
-    return application
+templates = Jinja2Templates(directory=TEMPLATES_PATH)
+app.mount("/static/local", StaticFiles(directory=STATIC_PATH), name="static")
 
 
-async def main():
-    application = get_application()
-    config = uvicorn.Config(
-        application, host="127.0.0.1", port=8000, reload=True, reload_delay=0.25,
-    )
-    server = uvicorn.Server(config)
-    await server.serve()
+@app.get("/", name="Home", tags=["Root"])
+async def home(request: Request):
+    return templates.TemplateResponse(request, "home.html")
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
-
-# uvicorn --factory --reload --host 127.0.0.1 --port 8000 src.main:get_application
+    uvicorn.run(
+        app, host="127.0.0.1", port=8000, reload=True,
+    )
