@@ -24,7 +24,7 @@ app = FastAPI(**settings.fastapi_kwargs, lifespan=lifespan)
 add_middleware(app, CORSMiddleware, **settings.cors_middleware_kwargs)
 
 templates = Jinja2Templates(directory=TEMPLATES_PATH)
-app.mount("/static/local", StaticFiles(directory=STATIC_PATH), name="static")
+app.mount("/static", StaticFiles(directory=STATIC_PATH), name="static")
 
 
 @app.get("/", name="Home", tags=["Root"])

@@ -3,20 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>FastAPI Backend Service</title>
-    <link rel="icon" href="/static/local/favicon.ico">
-    <link rel="stylesheet" href="/static/local/style.css">
+    <link href="/static/favicon.ico" rel="icon">
+    <link href="/static/style.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet">
 </head>
 <body>
     <div class="wrapper">
         <div class="centered">
             <p class="title">FastAPI Backend Service</p>
+            <div class="separator">
+                <hr>
+            </div>
             <div class="buttons">
-                <button class="linkButton" onclick="location.href='/docs'">swagger</button>
-                <button class="linkButton" onclick="location.href='/redoc'">redoc</button>
-                <button class="linkButton" onclick="location.href='/openapi'">openapi</button>
+                <button class="docs" onclick="location.href='/docs'">
+                    <span>Swagger docs</span>
+                </button>
+                <button class="docs" onclick="location.href='/redoc'">
+                    <span>Redoc docs</span>
+                </button>
+                <button class="docs" onclick="location.href='/openapi.json'">
+                    <span>OpenAPI schema</span>
+                </button>
             </div>
         </div>
     </div>
