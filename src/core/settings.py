@@ -19,7 +19,6 @@ class SettingsModel(BaseSettings):
 
 class FastAPISettings(BaseModel):
     debug: bool = True
-    api_prefix: str = "/api"
     docs_url: str = "/docs"
     openapi_prefix: str = ""
     openapi_url: str = "/openapi.json"
@@ -41,6 +40,11 @@ class CorsMiddlewareSettings(BaseModel):
     allow_headers: list[str] = ["*"]
 
 
+class PrefixSettings(BaseModel):
+    api_prefix: str = "/api"
+    tasks_prefix: str = "tasks"
+
+
 class Settings(BaseModel):
     # auth: AuthSettings = AuthSettings()
     # redis: RedisSettings = RedisSettings()
@@ -49,6 +53,7 @@ class Settings(BaseModel):
     fastapi: FastAPISettings = FastAPISettings()
     logging: LoggingSettings = LoggingSettings()
     cors_middleware: CorsMiddlewareSettings = CorsMiddlewareSettings()
+    prefixes: PrefixSettings = PrefixSettings()
 
     # @property
     # def postgres_dsn(self) -> PostgresDsn:
