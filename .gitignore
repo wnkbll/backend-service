@@ -5,6 +5,10 @@
 # JetBrains IDE
 .idea
 
+# Docker volumes
+**/pgdata/
+**/redis_data/
+
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
