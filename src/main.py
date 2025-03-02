@@ -27,7 +27,7 @@ add_middleware(app, CORSMiddleware, **settings.cors_middleware_kwargs)
 templates = Jinja2Templates(directory=TEMPLATES_PATH)
 app.mount("/static", StaticFiles(directory=STATIC_PATH), name="static")
 
-app.include_router(router, prefix=settings.prefixes.api_prefix)
+app.include_router(router, prefix=settings.api_prefix)
 
 
 @app.get("/", name="root:home", tags=["Root"])
