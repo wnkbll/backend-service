@@ -1,21 +1,27 @@
 from fastapi import APIRouter
+from pydantic import BaseModel
 
-from src.core.settings import get_app_settings
+from src.api.dependencies import SettingsDependency
+from src.core.settings import FastAPISettings
 
 router = APIRouter()
 
 
-@router.get("/settings", name="root:settings")
-async def get_app_info():
-    settings = get_app_settings()
-    info = {
-        "api_prefix": settings.prefixes.api_prefix,
-        # "postgres_dsn": settings.postgres_dsn,
-        # "redis_dsn": settings.redis_dsn,
-        "fastapi_kwargs": settings.fastapi_kwargs,
-    }
+class AppInfoResponseSchema(BaseModel):
+    api_prefix: str
+    postgres_dsn: str
+    redis_dsn: str
+    fastapi_kwargs: FastAPISettings
 
-    return info
+
+@router.get("/settings", name="root:settings", response_model=AppInfoResponseSchema)
+async def get_app_info(settings: SettingsDependency) -> AppInfoResponseSchema:
+    return AppInfoResponseSchema(
+        api_prefix=settings.api_prefix,
+        postgres_dsn=settings.postgres_dsn,
+        redis_dsn=settings.redis_dsn,
+        fastapi_kwargs=settings.fastapi_kwargs,
+    )
 
 # @router.get("/logger", name="core:logger")
 # async def logger_test():

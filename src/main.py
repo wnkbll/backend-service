@@ -1,3 +1,4 @@
+from concurrent.futures import ProcessPoolExecutor
 from contextlib import asynccontextmanager
 
 import uvicorn
@@ -16,9 +17,9 @@ settings = get_app_settings()
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    ...
+    pool = ProcessPoolExecutor(max_workers=1)
     yield
-    ...
+    pool.shutdown()
 
 
 app = FastAPI(**settings.fastapi_kwargs, lifespan=lifespan)
