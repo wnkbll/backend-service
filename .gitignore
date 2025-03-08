@@ -9,6 +9,9 @@
 **/pgdata/
 **/redis_data/
 
+# Logs folder
+*/logs/
+
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
