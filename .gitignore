@@ -10,7 +10,7 @@
 **/redis_data/
 
 # Logs folder
-*/logs/
+**/logs/
 
 # User-specific stuff
 .idea/**/workspace.xml
