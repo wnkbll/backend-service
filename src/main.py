@@ -1,4 +1,3 @@
-from concurrent.futures import ProcessPoolExecutor
 from contextlib import asynccontextmanager
 
 import uvicorn
@@ -8,6 +7,7 @@ from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 
 from src.api.routers import router
+from src.core.events import create_start_app_handler, create_stop_app_handler
 from src.core.paths import TEMPLATES_PATH, STATIC_PATH
 from src.core.settings import get_app_settings
 from src.core.toolkit import add_middleware
@@ -17,9 +17,9 @@ settings = get_app_settings()
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    pool = ProcessPoolExecutor(max_workers=1)
+    pool = await create_start_app_handler()
     yield
-    pool.shutdown()
+    await create_stop_app_handler(pool)
 
 
 app = FastAPI(**settings.fastapi_kwargs, lifespan=lifespan)
