@@ -33,7 +33,7 @@ async def get_app_info(settings: SettingsDependency) -> AppInfoResponseSchema:
     )
 
 
-@router.get("/logger", name="core:logger", response_model=SuccessResponseSchema)
+@router.get("/logger", name="root:logger", response_model=SuccessResponseSchema)
 async def logger_test() -> SuccessResponseSchema:
     logger.trace("This is logger.trace call")
     logger.debug("This is logger.debug call")
