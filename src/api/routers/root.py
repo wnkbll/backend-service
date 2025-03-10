@@ -23,8 +23,6 @@ class AppInfoResponseSchema(BaseModel):
 
 @router.get("/settings", name="root:settings", response_model=AppInfoResponseSchema)
 async def get_app_info(settings: SettingsDependency) -> AppInfoResponseSchema:
-    logger.info("root:settings invoke")
-
     return AppInfoResponseSchema(
         api_prefix=settings.api_prefix,
         postgres_dsn=settings.postgres_dsn,
